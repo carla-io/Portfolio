@@ -9,8 +9,26 @@ import {
   GraduationCap,
   Briefcase,
   Award,
+  Download,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import './App.css';
+
+// lucide-react removed brand icons (GitHub, Twitter, etc.) in 1.0,
+// so the GitHub mark is a small inline SVG instead of a lucide import.
+function GithubIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.13-.02-2.04-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.7 1.25 3.36.96.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.69 0-1.26.45-2.29 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.07 11.07 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.8 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.07.78 2.15 0 1.56-.01 2.81-.01 3.19 0 .31.21.66.79.55A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z" />
+    </svg>
+  );
+}
 
 type Accent = 'pink' | 'lilac' | 'mint';
 
@@ -39,6 +57,14 @@ interface Project {
   tags: string[];
   links?: ProjectLink[];
   note?: string;
+}
+
+interface GithubRepo {
+  name: string;
+  desc: string;
+  lang: string;
+  accent: Accent;
+  href: string;
 }
 
 type TimelineType = 'education' | 'work' | 'cert';
@@ -131,6 +157,19 @@ const TYPE_META: Record<TimelineType, TypeMeta> = {
   cert: { label: 'Certification', icon: Award, accent: 'mint' },
 };
 
+const GITHUB_USERNAME = 'carla-io';
+const GITHUB_URL = `https://github.com/${GITHUB_USERNAME}`;
+const CV_FILE_PATH = '/Carla-Dasal-CV.pdf';
+
+const GITHUB_REPOS: GithubRepo[] = [
+  { name: 'noisewatch', desc: 'JavaScript project — most starred repo on the profile.', lang: 'JavaScript', accent: 'pink', href: `${GITHUB_URL}/noisewatch` },
+  { name: 'bahalaka', desc: 'Frontend styling project built with CSS.', lang: 'CSS', accent: 'lilac', href: `${GITHUB_URL}/bahalaka` },
+  { name: 'clicklock', desc: 'PHP application.', lang: 'PHP', accent: 'mint', href: `${GITHUB_URL}/clicklock` },
+  { name: 'clicklock-real', desc: 'PHP application, follow-up build on clicklock.', lang: 'PHP', accent: 'mint', href: `${GITHUB_URL}/clicklock-real` },
+  { name: 'laravel', desc: 'JavaScript-backed Laravel project.', lang: 'JavaScript', accent: 'pink', href: `${GITHUB_URL}/laravel` },
+  { name: 'sneaknet', desc: 'PHP application.', lang: 'PHP', accent: 'mint', href: `${GITHUB_URL}/sneaknet` },
+];
+
 const STATS: Stat[] = [
   { num: '2026', label: 'Grad Year' },
   { num: '4', label: 'Projects Shipped' },
@@ -165,164 +204,6 @@ export default function CarlaDasalPortfolio() {
 
   return (
     <div className="cp-root">
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-
-        .cp-root {
-          --ink: #fffbfd;
-          --panel: #ffffff;
-          --panel-alt: #fbeef5;
-          --pink: #db2777;
-          --pink-soft: rgba(219,39,119,0.10);
-          --lilac: #7c3aed;
-          --lilac-soft: rgba(124,58,237,0.10);
-          --mint: #0d9488;
-          --mint-soft: rgba(13,148,136,0.10);
-          --paper: #231c30;
-          --slate: #6b6478;
-          --border: #ebe3ed;
-          font-family: 'Inter', sans-serif;
-          background: var(--ink);
-          color: var(--paper);
-          min-height: 100vh;
-          line-height: 1.6;
-        }
-        .cp-root * { box-sizing: border-box; }
-        .cp-mono { font-family: 'JetBrains Mono', monospace; }
-
-        .cp-tabbar {
-          position: sticky;
-          top: 0;
-          z-index: 50;
-          display: flex;
-          align-items: center;
-          gap: 1.1rem;
-          background: var(--panel-alt);
-          border-bottom: 1px solid var(--border);
-          padding: 0.7rem 1.25rem;
-          overflow-x: auto;
-        }
-        .cp-dots { display: flex; gap: 0.4rem; flex-shrink: 0; }
-        .cp-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-        .cp-dot-pink { background: var(--pink); }
-        .cp-dot-lilac { background: var(--lilac); }
-        .cp-dot-mint { background: var(--mint); }
-        .cp-tabs { display: flex; gap: 0.15rem; }
-        .cp-tab {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 0.78rem;
-          white-space: nowrap;
-          color: var(--slate);
-          background: transparent;
-          border: none;
-          padding: 0.4rem 0.7rem;
-          border-radius: 6px 6px 0 0;
-          cursor: pointer;
-          border-bottom: 2px solid transparent;
-          transition: color 0.2s, border-color 0.2s, background 0.2s;
-        }
-        .cp-tab:hover { color: var(--paper); background: rgba(0,0,0,0.04); }
-        .cp-tab-active { color: var(--pink); border-bottom-color: var(--pink); }
-        .cp-tab:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
-
-        .cp-section { padding: 4.5rem 1.5rem; max-width: 1080px; margin: 0 auto; }
-        .cp-eyebrow { font-family: 'JetBrains Mono', monospace; color: var(--pink); font-size: 0.82rem; letter-spacing: 0.04em; margin-bottom: 0.85rem; }
-        .cp-heading { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: clamp(1.5rem, 3.5vw, 2rem); margin: 0 0 2rem; }
-
-        .cp-hero { padding-top: 3.5rem; }
-        .cp-hero-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: clamp(2.1rem, 6vw, 3.4rem); line-height: 1.1; margin: 0 0 0.85rem; }
-        .cp-hero-bio { color: var(--slate); font-size: 1.02rem; max-width: 580px; margin-bottom: 1.5rem; }
-        .cp-status { display: inline-flex; align-items: center; gap: 0.55rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--mint); background: var(--mint-soft); border: 1px solid rgba(94,234,212,0.35); padding: 0.4rem 0.85rem; border-radius: 999px; margin-bottom: 1.75rem; }
-        .cp-status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); animation: cp-pulse 2s infinite; }
-
-        .cp-cta-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
-        .cp-btn { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; padding: 0.65rem 1.15rem; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: transform 0.15s, border-color 0.2s, color 0.2s; text-decoration: none; }
-        .cp-btn-primary { background: var(--pink); color: var(--ink); border: none; font-weight: 600; }
-        .cp-btn-primary:hover { transform: translateY(-2px); }
-        .cp-btn-ghost { background: transparent; color: var(--paper); border: 1px solid var(--border); }
-        .cp-btn-ghost:hover { border-color: var(--pink); color: var(--pink); }
-        .cp-btn:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
-
-        .cp-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 620px; margin-bottom: 3rem; }
-        .cp-stat-num { font-family: 'JetBrains Mono', monospace; font-size: 1.55rem; color: var(--pink); font-weight: 700; }
-        .cp-stat-label { font-size: 0.68rem; color: var(--slate); text-transform: uppercase; letter-spacing: 0.04em; }
-
-        .cp-window { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; max-width: 540px; box-shadow: 0 20px 45px -25px rgba(219,39,119,0.22); }
-        .cp-window-bar { display: flex; align-items: center; gap: 0.45rem; padding: 0.6rem 0.9rem; background: var(--panel-alt); border-bottom: 1px solid var(--border); }
-        .cp-window-bar .cp-dot { width: 8px; height: 8px; }
-        .cp-window-filename { margin-left: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--slate); }
-        .cp-code { padding: 1.15rem 1.3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.84rem; overflow-x: auto; }
-        .cp-code-line { display: flex; gap: 1rem; white-space: pre; }
-        .cp-line-num { color: #c9c2d4; user-select: none; width: 1.2rem; text-align: right; flex-shrink: 0; }
-        .cp-key { color: var(--lilac); }
-        .cp-string { color: var(--mint); }
-        .cp-punc { color: var(--slate); }
-
-        .cp-skills-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.75rem; }
-        .cp-skill-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
-        .cp-skill-row:last-child { border-bottom: none; }
-        .cp-skill-key { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; width: 115px; flex-shrink: 0; }
-        .cp-skill-key-pink { color: var(--pink); }
-        .cp-skill-key-lilac { color: var(--lilac); }
-        .cp-skill-key-mint { color: var(--mint); }
-        .cp-pill { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; padding: 0.25rem 0.65rem; border-radius: 999px; border: 1px solid; }
-        .cp-pill-pink { color: var(--pink); border-color: rgba(255,95,168,0.4); background: var(--pink-soft); }
-        .cp-pill-lilac { color: var(--lilac); border-color: rgba(156,140,255,0.4); background: var(--lilac-soft); }
-        .cp-pill-mint { color: var(--mint); border-color: rgba(94,234,212,0.4); background: var(--mint-soft); }
-
-        .cp-projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
-        .cp-project-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, border-color 0.2s; }
-        .cp-project-card:hover { transform: translateY(-4px); border-color: var(--pink); }
-        .cp-project-top { height: 4px; }
-        .cp-project-top-pink { background: var(--pink); }
-        .cp-project-top-lilac { background: var(--lilac); }
-        .cp-project-top-mint { background: var(--mint); }
-        .cp-project-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
-        .cp-ext-badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 600; padding: 0.2rem 0.55rem; border-radius: 4px; width: fit-content; margin-bottom: 0.85rem; }
-        .cp-project-title { font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .cp-project-desc { color: var(--slate); font-size: 0.9rem; margin-bottom: 1rem; flex: 1; }
-        .cp-tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.1rem; }
-        .cp-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--slate); background: rgba(0,0,0,0.04); padding: 0.2rem 0.5rem; border-radius: 4px; }
-        .cp-project-links { display: flex; gap: 1rem; }
-        .cp-project-link { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--paper); text-decoration: none; }
-        .cp-project-link:hover { color: var(--pink); }
-        .cp-project-note { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--slate); font-style: italic; }
-
-        .cp-timeline { position: relative; padding-left: 1.75rem; border-left: 1px solid var(--border); }
-        .cp-timeline-item { position: relative; padding-bottom: 2.1rem; }
-        .cp-timeline-item:last-child { padding-bottom: 0; }
-        .cp-timeline-dot { position: absolute; left: -1.94rem; top: 0.25rem; width: 10px; height: 10px; border-radius: 50%; }
-        .cp-timeline-date { font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--slate); margin-bottom: 0.4rem; }
-        .cp-type-pill { display: inline-flex; align-items: center; gap: 0.3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; padding: 0.15rem 0.5rem; border-radius: 999px; border: 1px solid; margin-left: 0.6rem; }
-        .cp-timeline-title { font-weight: 600; font-size: 1rem; margin-bottom: 0.2rem; }
-        .cp-timeline-org { color: var(--slate); font-size: 0.88rem; margin-bottom: 0.4rem; }
-        .cp-timeline-desc { color: var(--slate); font-size: 0.88rem; max-width: 560px; }
-
-        .cp-terminal { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; margin-bottom: 2rem; }
-        .cp-prompt { color: var(--mint); }
-        .cp-terminal-out { color: var(--slate); margin: 0.5rem 0 1.25rem 1.2rem; }
-        .cp-terminal-out:last-child { margin-bottom: 0; }
-        .cp-contact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
-        .cp-contact-btn { display: flex; align-items: center; gap: 0.6rem; background: var(--panel-alt); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; color: var(--paper); text-decoration: none; font-size: 0.88rem; transition: border-color 0.2s, color 0.2s; }
-        .cp-contact-btn:hover { border-color: var(--pink); color: var(--pink); }
-        .cp-contact-note { color: var(--slate); font-size: 0.82rem; margin-top: 1.25rem; }
-
-        .cp-footer { text-align: center; padding: 2rem 1.5rem 3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--slate); }
-
-        @keyframes cp-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        @media (max-width: 720px) {
-          .cp-projects-grid { grid-template-columns: 1fr; }
-          .cp-contact-grid { grid-template-columns: 1fr; }
-          .cp-stats { grid-template-columns: repeat(2, 1fr); }
-          .cp-skill-row { flex-direction: column; align-items: flex-start; }
-          .cp-skill-key { width: auto; margin-bottom: 0.3rem; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .cp-root * { animation: none !important; transition: none !important; }
-        }
-      `}</style>
-
       <header className="cp-tabbar">
         <div className="cp-dots">
           <span className="cp-dot cp-dot-pink" />
@@ -362,6 +243,9 @@ export default function CarlaDasalPortfolio() {
             <button className="cp-btn cp-btn-primary" onClick={() => scrollTo('projects')}>
               View projects
             </button>
+            <a className="cp-btn cp-btn-ghost" href={CV_FILE_PATH} download>
+              <Download size={15} /> Download CV
+            </a>
             <a className="cp-btn cp-btn-ghost" href="mailto:dasalcarla812@gmail.com">
               <Mail size={15} /> Email me
             </a>
@@ -440,6 +324,26 @@ export default function CarlaDasalPortfolio() {
               </div>
             ))}
           </div>
+
+          <div className="cp-github-header">
+            <GithubIcon size={18} />
+            <span>From <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="cp-github-link">github.com/{GITHUB_USERNAME}</a></span>
+          </div>
+          <div className="cp-repos-grid">
+            {GITHUB_REPOS.map((r) => (
+              <a key={r.name} className="cp-repo-card" href={r.href} target="_blank" rel="noopener noreferrer">
+                <div className="cp-repo-top">
+                  <Code2 size={14} />
+                  <span className="cp-repo-name">{r.name}</span>
+                </div>
+                <div className="cp-repo-desc">{r.desc}</div>
+                <div className="cp-repo-lang">
+                  <span className={`cp-lang-dot cp-dot-${r.accent}`} />
+                  {r.lang}
+                </div>
+              </a>
+            ))}
+          </div>
         </section>
 
         {/* TIMELINE */}
@@ -482,6 +386,9 @@ export default function CarlaDasalPortfolio() {
               </a>
               <a className="cp-contact-btn" href="https://www.linkedin.com/in/carla-dasal-486736399" target="_blank" rel="noopener noreferrer">
                 <Link2 size={16} /> LinkedIn
+              </a>
+              <a className="cp-contact-btn" href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+                <GithubIcon size={16} /> github.com/{GITHUB_USERNAME}
               </a>
               <a className="cp-contact-btn" href="tel:+639662509610">
                 <Phone size={16} /> +63 966 250 9610
