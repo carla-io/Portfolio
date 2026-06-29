@@ -134,7 +134,7 @@ const PROJECTS: Project[] = [
     ext: 'LOW-CODE',
     accent: 'mint',
     title: 'PO Request Form',
-    desc: 'Power Apps tool that replaced a manual, paper-based purchase order process — wired into SharePoint and Power Automate for the Hypercare team at Telstra.',
+    desc: 'Power Apps tool that replaced a manual, paper-based purchase order process — wired into SharePoint and Power Automate.',
     tags: ['Power Apps', 'SharePoint', 'Power Automate'],
     note: 'Internal business solution — Telstra Hypercare BU',
   },
