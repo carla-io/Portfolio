@@ -243,9 +243,9 @@ export default function CarlaDasalPortfolio() {
             <button className="cp-btn cp-btn-primary" onClick={() => scrollTo('projects')}>
               View projects
             </button>
-            <a className="cp-btn cp-btn-ghost" href={CV_FILE_PATH} download>
-              <Download size={15} /> Download CV
-            </a>
+            <a className="cp-btn cp-btn-ghost" href={CV_FILE_PATH} download="Carla-Dasal-CV.pdf">
+  <Download size={15} /> Download CV
+</a>
             <a className="cp-btn cp-btn-ghost" href="mailto:dasalcarla812@gmail.com">
               <Mail size={15} /> Email me
             </a>
