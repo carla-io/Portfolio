@@ -14,6 +14,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import './App.css';
 
+
 // lucide-react removed brand icons (GitHub, Twitter, etc.) in 1.0,
 // so the GitHub mark is a small inline SVG instead of a lucide import.
 function GithubIcon({ size = 16 }: { size?: number }) {
@@ -159,7 +160,7 @@ const TYPE_META: Record<TimelineType, TypeMeta> = {
 
 const GITHUB_USERNAME = 'carla-io';
 const GITHUB_URL = `https://github.com/${GITHUB_USERNAME}`;
-const CV_FILE_PATH = '/Carla-Dasal-CV.pdf';
+const CV_FILE_PATH = '/Dasal_Carla_C_Resume.pdf';
 
 const GITHUB_REPOS: GithubRepo[] = [
   { name: 'noisewatch', desc: 'JavaScript project — most starred repo on the profile.', lang: 'JavaScript', accent: 'pink', href: `${GITHUB_URL}/noisewatch` },
@@ -243,8 +244,8 @@ export default function CarlaDasalPortfolio() {
             <button className="cp-btn cp-btn-primary" onClick={() => scrollTo('projects')}>
               View projects
             </button>
-            <a className="cp-btn cp-btn-ghost" href={CV_FILE_PATH} download="Carla-Dasal-CV.pdf">
-  <Download size={15} /> Download CV
+        <a className="cp-btn cp-btn-ghost" href={CV_FILE_PATH} target="_blank" rel="noopener noreferrer">
+  <Download size={15} /> View/Download CV
 </a>
             <a className="cp-btn cp-btn-ghost" href="mailto:dasalcarla812@gmail.com">
               <Mail size={15} /> Email me
