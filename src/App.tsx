@@ -326,7 +326,7 @@ export default function CarlaDasalPortfolio() {
             ))}
           </div>
 
-          <div className="cp-github-header">
+          {/* <div className="cp-github-header">
             <GithubIcon size={18} />
             <span>From <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="cp-github-link">github.com/{GITHUB_USERNAME}</a></span>
           </div>
@@ -344,7 +344,7 @@ export default function CarlaDasalPortfolio() {
                 </div>
               </a>
             ))}
-          </div>
+          </div> */}
         </section>
 
         {/* TIMELINE */}
