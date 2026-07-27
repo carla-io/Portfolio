@@ -78,13 +78,6 @@ interface Project {
   belowLinksImage?: ProjectImage; // plain (non-phone-frame) image rendered directly under the links row
 }
 
-interface GithubRepo {
-  name: string;
-  desc: string;
-  lang: string;
-  accent: Accent;
-  href: string;
-}
 
 type TimelineType = 'education' | 'work' | 'cert';
 
