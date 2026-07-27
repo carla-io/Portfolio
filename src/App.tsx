@@ -232,8 +232,6 @@ const CV_FILE_PATH = '/Dasal_Carla_C_Resume.pdf';
 
 const GITHUB_REPOS: GithubRepo[] = [
   { name: 'noisewatch', desc: 'JavaScript project — most starred repo on the profile.', lang: 'JavaScript', accent: 'pink', href: `${GITHUB_URL}/noisewatch` },
-  { name: 'bahalaka', desc: 'Frontend styling project built with CSS.', lang: 'CSS', accent: 'lilac', href: `${GITHUB_URL}/bahalaka` },
-  { name: 'clicklock', desc: 'PHP application.', lang: 'PHP', accent: 'mint', href: `${GITHUB_URL}/clicklock` },
   { name: 'clicklock-real', desc: 'PHP application, follow-up build on clicklock.', lang: 'PHP', accent: 'mint', href: `${GITHUB_URL}/clicklock-real` },
   { name: 'laravel', desc: 'JavaScript-backed Laravel project.', lang: 'JavaScript', accent: 'pink', href: `${GITHUB_URL}/laravel` },
   { name: 'sneaknet', desc: 'PHP application.', lang: 'PHP', accent: 'mint', href: `${GITHUB_URL}/sneaknet` },
@@ -525,7 +523,7 @@ export default function CarlaDasalPortfolio() {
                 </div>
               </a>
             ))}
-          </div>
+          </div> 
         </section>
 
         {/* TIMELINE */}
