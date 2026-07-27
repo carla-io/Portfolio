@@ -505,25 +505,6 @@ export default function CarlaDasalPortfolio() {
             ))}
           </div>
 
-          <div className="cp-github-header">
-            <GithubIcon size={18} />
-            <span>From <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="cp-github-link">github.com/{GITHUB_USERNAME}</a></span>
-          </div>
-          <div className="cp-repos-grid">
-            {GITHUB_REPOS.map((r) => (
-              <a key={r.name} className="cp-repo-card" href={r.href} target="_blank" rel="noopener noreferrer">
-                <div className="cp-repo-top">
-                  <Code2 size={14} />
-                  <span className="cp-repo-name">{r.name}</span>
-                </div>
-                <div className="cp-repo-desc">{r.desc}</div>
-                <div className="cp-repo-lang">
-                  <span className={`cp-lang-dot cp-dot-${r.accent}`} />
-                  {r.lang}
-                </div>
-              </a>
-            ))}
-          </div> 
         </section>
 
         {/* TIMELINE */}
