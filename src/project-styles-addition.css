@@ -1,0 +1,115 @@
+/* ============================================================
+   ADD-ON STYLES: stacked project sections + screenshot gallery
+   Paste this block onto the end of your existing App.css.
+   Reuses your existing --pink / --lilac / --mint accent classes
+   (cp-dot-*, cp-pill-*) wherever possible; only new class names
+   below (cp-projects-stack, cp-project-full*, cp-shot*) need CSS.
+   ============================================================ */
+
+.cp-projects-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.cp-project-full {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 1.75rem 2rem 2rem;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.cp-project-full-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.cp-project-index {
+  font-family: monospace;
+  font-size: 0.85rem;
+  opacity: 0.35;
+  letter-spacing: 0.05em;
+}
+
+.cp-project-full-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+}
+
+.cp-project-full-desc {
+  line-height: 1.65;
+  opacity: 0.85;
+  margin: 0 0 1rem;
+  max-width: 68ch;
+}
+
+/* Screenshot gallery — each shot framed like a little app window,
+   echoing the cp-window / cp-window-bar motif used in the about section */
+.cp-project-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.cp-shot {
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.cp-shot:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.cp-shot-bar {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cp-shot img {
+  display: block;
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  object-position: top;
+  background: #f4f4f4;
+}
+
+.cp-shot figcaption {
+  padding: 0.55rem 0.75rem 0.7rem;
+  font-size: 0.8rem;
+  opacity: 0.75;
+  line-height: 1.3;
+}
+
+.cp-shot-placeholder {
+  margin-top: 1.5rem;
+  border: 1px dashed rgba(0, 0, 0, 0.18);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.5;
+}
+
+@media (max-width: 640px) {
+  .cp-project-full {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  .cp-project-gallery {
+    grid-template-columns: 1fr;
+  }
+}

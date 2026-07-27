@@ -169,3 +169,374 @@
   @media (prefers-reduced-motion: reduce) {
     .cp-root * { animation: none !important; transition: none !important; }
   }
+/* ============================================================
+   ADD-ON STYLES: stacked project sections + screenshot gallery
+   Paste this block onto the end of your existing App.css.
+   Reuses your existing --pink / --lilac / --mint accent classes
+   (cp-dot-*, cp-pill-*) wherever possible; only new class names
+   below (cp-projects-stack, cp-project-full*, cp-shot*) need CSS.
+   ============================================================ */
+
+.cp-projects-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.cp-project-full {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  padding: 1.75rem 2rem 2rem;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* When a project has a screenshot, lay info and media side by side */
+.cp-project-full-split {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2.25rem;
+  align-items: center;
+}
+
+/* Alternate which side the image sits on, project to project */
+.cp-project-full-reverse .cp-project-info {
+  order: 2;
+}
+.cp-project-full-reverse .cp-project-media {
+  order: 1;
+}
+
+.cp-project-full-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.cp-project-index {
+  font-family: monospace;
+  font-size: 0.85rem;
+  opacity: 0.35;
+  letter-spacing: 0.05em;
+}
+
+.cp-project-full-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+}
+
+.cp-project-full-desc {
+  line-height: 1.65;
+  opacity: 0.85;
+  margin: 0 0 1rem;
+  max-width: 58ch;
+}
+
+/* Emphasized project link — a real button, not a quiet inline link */
+.cp-project-links {
+  margin-top: 1.1rem;
+}
+
+.cp-project-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.3rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.cp-project-cta:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
+}
+
+.cp-project-cta-pink   { background: #ec4899; }
+.cp-project-cta-lilac  { background: #8b5cf6; }
+.cp-project-cta-mint   { background: #10b981; }
+
+/* Screenshot(s) — framed like a little app window, echoing the
+   cp-window / cp-window-bar motif used in the about section */
+.cp-project-media {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.cp-shot {
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  cursor: zoom-in;
+}
+
+.cp-shot:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.cp-shot:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.cp-shot-bar {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  background: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.cp-shot img {
+  display: block;
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  object-position: top;
+  background: #f4f4f4;
+}
+
+.cp-shot figcaption {
+  padding: 0.55rem 0.75rem 0.7rem;
+  font-size: 0.8rem;
+  opacity: 0.75;
+  line-height: 1.3;
+}
+
+.cp-shot-placeholder {
+  border: 1px dashed rgba(0, 0, 0, 0.18);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.5;
+}
+
+/* Inline non-mobile-frame screenshot placed under a project's links
+   (e.g. the NoiseWatch QR code below the "Visit site" button) */
+.cp-shot-inline {
+  max-width: 260px;
+  margin-top: 1.25rem;
+}
+
+.cp-shot-inline img {
+  height: auto;
+}
+
+@media (max-width: 780px) {
+  .cp-project-full-split {
+    grid-template-columns: 1fr;
+  }
+  .cp-project-full-reverse .cp-project-info,
+  .cp-project-full-reverse .cp-project-media {
+    order: initial;
+  }
+}
+
+@media (max-width: 640px) {
+  .cp-project-full {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+}
+
+/* Lightbox — click a screenshot to see it enlarged */
+.cp-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  cursor: zoom-out;
+  animation: cp-lightbox-fade 0.15s ease;
+}
+
+@keyframes cp-lightbox-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cp-lightbox-content {
+  margin: 0;
+  max-width: min(1100px, 92vw);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: default;
+}
+
+.cp-lightbox-content img {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.cp-lightbox-content figcaption {
+  color: #fff;
+  opacity: 0.8;
+  font-size: 0.85rem;
+  margin-top: 0.9rem;
+  text-align: center;
+}
+
+.cp-lightbox-close {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cp-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Mobile phone-style screenshot frame */
+.cp-shot-phone {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 260px;
+  border-radius: 2.4rem;
+  border: 10px solid #17131f;
+  background: #17131f;
+  box-shadow: 0 20px 45px -18px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  cursor: zoom-in;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.cp-shot-phone:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 50px -16px rgba(0, 0, 0, 0.45);
+}
+
+.cp-shot-phone:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+}
+
+.cp-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 42%;
+  height: 20px;
+  background: #17131f;
+  border-radius: 0 0 14px 14px;
+  z-index: 2;
+}
+
+.cp-shot-phone img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 9 / 19.5;
+  object-fit: cover;
+  object-position: top;
+  background: #f4f4f4;
+  border-radius: 1.6rem;
+}
+
+.cp-shot-phone figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.6rem 0.75rem 0.75rem;
+  font-size: 0.72rem;
+  color: #fff;
+  background: linear-gradient(to top, rgba(0,0,0,0.65), transparent);
+  text-align: center;
+}
+
+.cp-impact {
+  margin: 0 0 1.1rem;
+}
+
+.cp-impact-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.45rem;
+}
+
+.cp-impact-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  list-style: none;
+}
+
+.cp-impact-list li {
+  position: relative;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  opacity: 0.85;
+  margin-bottom: 0.35rem;
+  padding-left: 0.1rem;
+}
+
+.cp-impact-list li::before {
+  content: '→';
+  position: absolute;
+  left: -1.1rem;
+  opacity: 0.6;
+}
+
+.cp-impact-list li:last-child {
+  margin-bottom: 0;
+}
+
+.cp-capstone-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--pink);
+  background: var(--pink-soft);
+  border: 1px solid rgba(219, 39, 119, 0.35);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+}
+
+/* When a mobile project has 2+ screenshots (like NoiseWatch's
+   app screen + QR code), lay them side by side instead of stacked */
+.cp-project-media-mobile {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.cp-project-media-mobile .cp-shot-phone {
+  max-width: 220px;
+}

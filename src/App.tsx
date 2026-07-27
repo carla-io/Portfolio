@@ -10,13 +10,19 @@ import {
   Briefcase,
   Award,
   Download,
+  X,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import './App.css';
 
 
-// lucide-react removed brand icons (GitHub, Twitter, etc.) in 1.0,
-// so the GitHub mark is a small inline SVG instead of a lucide import.
+import circuithubDashboard from './assets/circuithub/01-dashboard.png';
+import captivityHome from './assets/captivity-care/01-home.jpg';
+import jewelStorefront from './assets/jewel/01-storefront.jpg';
+import noisewatchReport from './assets/noisewatch/01-noise-report.png';
+import noisewatchQr from './assets/noisewatch/02-qr-download.png';
+
+
 function GithubIcon({ size = 16 }: { size?: number }) {
   return (
     <svg
@@ -50,6 +56,13 @@ interface ProjectLink {
   icon: 'github' | 'external';
 }
 
+interface ProjectImage {
+  src: string;
+  caption: string;
+}
+
+type ProjectFrame = 'browser' | 'mobile';
+
 interface Project {
   ext: string;
   accent: Accent;
@@ -58,6 +71,11 @@ interface Project {
   tags: string[];
   links?: ProjectLink[];
   note?: string;
+  images?: ProjectImage[];
+  frame?: ProjectFrame; // 'browser' (default) shows a window-bar mockup, 'mobile' shows a phone frame
+  impact?: string[]; // short, outcome-focused bullets — what changed because this exists
+  capstone?: boolean; // shows a "Capstone Project" badge instead of the index number
+  belowLinksImage?: ProjectImage; // plain (non-phone-frame) image rendered directly under the links row
 }
 
 interface GithubRepo {
@@ -108,12 +126,23 @@ const SKILL_GROUPS: SkillGroup[] = [
 
 const PROJECTS: Project[] = [
   {
-    ext: '.py',
+    ext: '.tsx',
     accent: 'pink',
-    title: 'CircuitHub',
-    desc: 'Inventory system for tracking electronic components — built to stop loss and duplication with one organized source of truth.',
-    tags: ['Python', 'Inventory System', 'Database'],
-    links: [{ label: 'Live demo', href: 'https://python-frontend-9vgt.onrender.com', icon: 'external' }],
+    title: 'NoiseWatch',
+    desc: 'A community-driven platform that lets residents record, analyze, and report noise disturbances directly to their barangay — backed by real-time AI audio analysis and GPS location tagging. Detects and ranks the sources behind a recording (music, traffic, construction, etc.), measures decibel level and distance, and flags likely violations such as entertainment noise during quiet hours, turning a raw audio clip into a barangay-ready report.',
+    tags: ['React', 'Mobile', 'AI Audio Analysis', 'GPS', 'Capstone'],
+    links: [{ label: 'Visit site', href: 'https://noisewatchapp.vercel.app/', icon: 'external' }],
+    frame: 'mobile',
+    capstone: true,
+    impact: [
+      'Gives residents a direct, evidence-backed channel to report noise disturbances to their barangay instead of informal complaints',
+      'Real-time AI analysis identifies and ranks likely noise sources, so reports come with data instead of just an accusation',
+      'GPS tagging and measured decibel/distance readings give barangay officials context they can act on immediately',
+    ],
+    images: [
+      { src: noisewatchReport, caption: 'Noise report — detected sounds, decibel level & flagged reasons' },
+    ],
+    belowLinksImage: { src: noisewatchQr, caption: 'Scan to download the Android APK' },
   },
   {
     ext: '.jsx',
@@ -122,6 +151,32 @@ const PROJECTS: Project[] = [
     desc: 'Mobile app for logging animal behavior, tracking health, flagging issues, and scheduling vet visits.',
     tags: ['React Native', 'Mobile', 'Health Tracking'],
     links: [{ label: 'View repo', href: 'https://github.com/carla-io/animalMobile', icon: 'github' }],
+    frame: 'mobile',
+    impact: [
+      'Centralized animal health logs that were previously scattered across paper and memory',
+      'Status filters make it easy to spot flagged issues at a glance instead of digging through records',
+      'Vet-visit scheduling built directly into the workflow instead of a separate calendar or notebook',
+    ],
+    images: [
+      { src: captivityHome, caption: 'Home screen — task list with status filters' },
+    ],
+  },
+  {
+    ext: '.py',
+    accent: 'pink',
+    title: 'CircuitHub',
+    desc: 'A full-stack inventory management system for electronics components, built to eliminate the stock loss and duplicate ordering that come from tracking parts across spreadsheets. Includes a live dashboard with at-a-glance stats (total components, total stock, low-stock alerts, category counts), full CRUD for components with fields like category, stock level, minimum threshold, specifications, and supplier, and automatic status flags that surface low-stock items in real time. A dedicated Reports module generates downloadable PDF summaries — category breakdowns, supplier performance scoring, and monthly usage trends — turning raw inventory data into something a manager can actually act on.',
+    tags: ['Python', 'Inventory System', 'Database', 'Data Visualization', 'PDF Reporting'],
+    links: [{ label: 'Live demo', href: 'https://python-frontend-9vgt.onrender.com', icon: 'external' }],
+    frame: 'browser',
+    impact: [
+      'Replaced spreadsheet tracking with a single source of truth for stock across categories',
+      'Automatic low-stock flags cut the risk of stockouts and duplicate ordering',
+      'PDF reporting turned raw inventory data into supplier and usage insights managers can act on',
+    ],
+    images: [
+      { src: circuithubDashboard, caption: 'Dashboard — stock stats & low-stock alerts' },
+    ],
   },
   {
     ext: '.jsx',
@@ -130,6 +185,14 @@ const PROJECTS: Project[] = [
     desc: 'Mobile storefront for jewelry products with full CRUD product management, built end to end.',
     tags: ['React Native', 'E-commerce', 'CRUD'],
     links: [{ label: 'View repo', href: 'https://github.com/carla-io/jewel2', icon: 'github' }],
+    frame: 'mobile',
+    impact: [
+      'End-to-end product CRUD gives full control over catalog updates without touching a database directly',
+      'Category and cart flows built to mirror a real e-commerce shopping experience',
+    ],
+    images: [
+      { src: jewelStorefront, caption: 'Storefront — categories, product grid & cart' },
+    ],
   },
   {
     ext: 'LOW-CODE',
@@ -138,6 +201,11 @@ const PROJECTS: Project[] = [
     desc: 'Power Apps tool that replaced a manual, paper-based purchase order process — wired into SharePoint and Power Automate.',
     tags: ['Power Apps', 'SharePoint', 'Power Automate'],
     note: 'Internal business solution — Telstra Hypercare BU',
+    impact: [
+      'Digitized and automated a manual, paper-based workflow',
+      'Improved document and data management across the process',
+      'Collaborated directly with stakeholders to deliver a user-friendly business solution',
+    ],
   },
 ];
 
@@ -173,7 +241,7 @@ const GITHUB_REPOS: GithubRepo[] = [
 
 const STATS: Stat[] = [
   { num: '2026', label: 'Grad Year' },
-  { num: '4', label: 'Projects Shipped' },
+  { num: '5', label: 'Projects Shipped' },
   { num: '1', label: 'Internship' },
   { num: '5', label: 'Certifications' },
 ];
@@ -181,6 +249,16 @@ const STATS: Stat[] = [
 export default function CarlaDasalPortfolio() {
   const [active, setActive] = useState<string>('about');
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const [lightbox, setLightbox] = useState<ProjectImage | null>(null);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setLightbox(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightbox]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -244,9 +322,9 @@ export default function CarlaDasalPortfolio() {
             <button className="cp-btn cp-btn-primary" onClick={() => scrollTo('projects')}>
               View projects
             </button>
-        <a className="cp-btn cp-btn-ghost" href={CV_FILE_PATH} target="_blank" rel="noopener noreferrer">
-  <Download size={15} /> View/Download CV
-</a>
+            <a className="cp-btn cp-btn-ghost" href={CV_FILE_PATH} target="_blank" rel="noopener noreferrer">
+              <Download size={15} /> View/Download CV
+            </a>
             <a className="cp-btn cp-btn-ghost" href="mailto:dasalcarla812@gmail.com">
               <Mail size={15} /> Email me
             </a>
@@ -298,31 +376,134 @@ export default function CarlaDasalPortfolio() {
         <section id="projects" ref={setRef('projects')} className="cp-section">
           <div className="cp-eyebrow">// projects</div>
           <h2 className="cp-heading">Things I've built</h2>
-          <div className="cp-projects-grid">
-            {PROJECTS.map((p) => (
-              <div className="cp-project-card" key={p.title}>
-                <div className={`cp-project-top cp-project-top-${p.accent}`} />
-                <div className="cp-project-body">
-                  <span className={`cp-ext-badge cp-pill-${p.accent}`}>{p.ext}</span>
-                  <div className="cp-project-title">{p.title}</div>
-                  <div className="cp-project-desc">{p.desc}</div>
-                  <div className="cp-tag-row">
-                    {p.tags.map((t) => <span key={t} className="cp-tag">{t}</span>)}
+
+          <div className="cp-projects-stack">
+            {PROJECTS.map((p, i) => (
+              <article
+                className={`cp-project-full ${p.images?.length ? 'cp-project-full-split' : ''}`}
+                key={p.title}
+              >
+                <div className="cp-project-info">
+                  <div className="cp-project-full-header">
+                    <span className={`cp-ext-badge cp-pill-${p.accent}`}>{p.ext}</span>
+                    {p.capstone ? (
+                      <span className="cp-capstone-badge">Capstone Project</span>
+                    ) : (
+                      <span className="cp-project-index">{String(i + 1).padStart(2, '0')}</span>
+                    )}
                   </div>
+
+                  <h3 className="cp-project-full-title">{p.title}</h3>
+                  <p className="cp-project-full-desc">{p.desc}</p>
+
+                  <div className="cp-tag-row">
+                    {p.tags.map((t) => (
+                      <span key={t} className="cp-tag">{t}</span>
+                    ))}
+                  </div>
+
+                  {p.impact && p.impact.length > 0 ? (
+                    <div className="cp-impact">
+                      <div className={`cp-impact-label cp-skill-key-${p.accent}`}>Impact</div>
+                      <ul className="cp-impact-list">
+                        {p.impact.map((line) => (
+                          <li key={line}>{line}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+
                   {p.links ? (
                     <div className="cp-project-links">
                       {p.links.map((l) => (
-                        <a key={l.label} className="cp-project-link" href={l.href} target="_blank" rel="noopener noreferrer">
+                        <a
+                          key={l.label}
+                          className={`cp-project-link cp-project-cta cp-project-cta-${p.accent}`}
+                          href={l.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           {l.icon === 'github' ? <Code2 size={15} /> : <ExternalLink size={15} />}
                           {l.label}
                         </a>
                       ))}
                     </div>
-                  ) : (
+                  ) : p.note ? (
                     <div className="cp-project-note">{p.note}</div>
-                  )}
+                  ) : null}
+
+                  {p.belowLinksImage ? (
+                    <figure
+                      className="cp-shot cp-shot-inline"
+                      onClick={() => setLightbox(p.belowLinksImage!)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') setLightbox(p.belowLinksImage!);
+                      }}
+                      aria-label={`Enlarge screenshot: ${p.belowLinksImage.caption}`}
+                    >
+                      <div className="cp-shot-bar">
+                        <span className="cp-dot cp-dot-pink" />
+                        <span className="cp-dot cp-dot-lilac" />
+                        <span className="cp-dot cp-dot-mint" />
+                      </div>
+                      <img
+                        src={p.belowLinksImage.src}
+                        alt={`${p.title} — ${p.belowLinksImage.caption}`}
+                        loading="lazy"
+                      />
+                      <figcaption>{p.belowLinksImage.caption}</figcaption>
+                    </figure>
+                  ) : null}
                 </div>
-              </div>
+
+                {p.images && p.images.length > 0 ? (
+                  <div className={`cp-project-media ${p.frame === 'mobile' ? 'cp-project-media-mobile' : ''}`}>
+                    {p.images.map((img) =>
+                      p.frame === 'mobile' ? (
+                        <figure
+                          className="cp-shot-phone"
+                          key={img.src}
+                          onClick={() => setLightbox(img)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') setLightbox(img);
+                          }}
+                          aria-label={`Enlarge screenshot: ${img.caption}`}
+                        >
+                          <span className="cp-notch" aria-hidden="true" />
+                          <img src={img.src} alt={`${p.title} — ${img.caption}`} loading="lazy" />
+                          <figcaption>{img.caption}</figcaption>
+                        </figure>
+                      ) : (
+                        <figure
+                          className="cp-shot"
+                          key={img.src}
+                          onClick={() => setLightbox(img)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') setLightbox(img);
+                          }}
+                          aria-label={`Enlarge screenshot: ${img.caption}`}
+                        >
+                          <div className="cp-shot-bar">
+                            <span className="cp-dot cp-dot-pink" />
+                            <span className="cp-dot cp-dot-lilac" />
+                            <span className="cp-dot cp-dot-mint" />
+                          </div>
+                          <img src={img.src} alt={`${p.title} — ${img.caption}`} loading="lazy" />
+                          <figcaption>{img.caption}</figcaption>
+                        </figure>
+                      )
+                    )}
+                  </div>
+                ) : (
+                  <div className="cp-shot-placeholder">Screenshots coming soon</div>
+                )}
+              </article>
             ))}
           </div>
 
@@ -404,6 +585,25 @@ export default function CarlaDasalPortfolio() {
       </main>
 
       <footer className="cp-footer">Built with React · 2026</footer>
+
+      {lightbox && (
+        <div className="cp-lightbox" onClick={() => setLightbox(null)}>
+          <button
+            className="cp-lightbox-close"
+            onClick={() => setLightbox(null)}
+            aria-label="Close enlarged screenshot"
+          >
+            <X size={20} />
+          </button>
+          <figure
+            className="cp-lightbox-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img src={lightbox.src} alt={lightbox.caption} />
+            <figcaption>{lightbox.caption}</figcaption>
+          </figure>
+        </div>
+      )}
     </div>
   );
 }
