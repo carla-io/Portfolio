@@ -230,12 +230,6 @@ const GITHUB_USERNAME = 'carla-io';
 const GITHUB_URL = `https://github.com/${GITHUB_USERNAME}`;
 const CV_FILE_PATH = '/Dasal_Carla_C_Resume.pdf';
 
-const GITHUB_REPOS: GithubRepo[] = [
-  { name: 'noisewatch', desc: 'JavaScript project — most starred repo on the profile.', lang: 'JavaScript', accent: 'pink', href: `${GITHUB_URL}/noisewatch` },
-  { name: 'clicklock-real', desc: 'PHP application, follow-up build on clicklock.', lang: 'PHP', accent: 'mint', href: `${GITHUB_URL}/clicklock-real` },
-  { name: 'laravel', desc: 'JavaScript-backed Laravel project.', lang: 'JavaScript', accent: 'pink', href: `${GITHUB_URL}/laravel` },
-  { name: 'sneaknet', desc: 'PHP application.', lang: 'PHP', accent: 'mint', href: `${GITHUB_URL}/sneaknet` },
-];
 
 const STATS: Stat[] = [
   { num: '2026', label: 'Grad Year' },
