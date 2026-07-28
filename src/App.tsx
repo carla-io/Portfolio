@@ -177,7 +177,7 @@ const PROJECTS: Project[] = [
     title: 'Jewel',
     desc: 'Mobile storefront for jewelry products with full CRUD product management, built end to end.',
     tags: ['React Native', 'E-commerce', 'CRUD'],
-    links: [{ label: 'View repo', href: 'https://github.com/carla-io/jewel2', icon: 'github' }],
+    links: [{ label: 'View repo', href: 'https://github.com/carla-io/jewel-ecommerce.git', icon: 'github' }],
     frame: 'mobile',
     impact: [
       'End-to-end product CRUD gives full control over catalog updates without touching a database directly',
