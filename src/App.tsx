@@ -293,11 +293,7 @@ export default function CarlaDasalPortfolio() {
           <div className="cp-eyebrow">// carla-dasal/portfolio</div>
           <h1 className="cp-hero-name">Carla Dasal</h1>
           <p className="cp-hero-bio">
-            Graduating IT student at TUP with hands-on experience turning manual business
-            processes into working software — a Power Platform tool built during a Telstra
-            internship, plus full-stack and mobile apps built solo. Comfortable across React,
-            Node, Python, and SQL, and just as comfortable reaching for low-code when that's
-            the right tool for the job.
+            IT graduate from TUP with hands-on experience in software development, business solutions, and application design. My experience includes contributing to a Power Platform solution during my Telstra internship and independently developing full-stack web and mobile applications. I work with React, Node.js, Python, Java, SQL, and REST APIs, with a strong interest in building practical, scalable, and user-focused software.
           </p>
           <div className="cp-status">
             <span className="cp-status-dot" />
