@@ -273,6 +273,16 @@ export default function CarlaDasalPortfolio() {
   };
 }, []);
 
+ useEffect(() => {
+    const nav = document.querySelector<HTMLElement>('.cp-nav');
+    const tab = document.querySelector<HTMLElement>('.cp-tab-active');
+    if (!nav || !tab) return;
+    nav.scrollTo({
+      left: tab.offsetLeft - nav.clientWidth / 2 + tab.offsetWidth / 2,
+      behavior: 'smooth',
+    });
+  }, [active]);
+
   const scrollTo = (id: string): void => {
     sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
