@@ -15,13 +15,12 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import './App.css';
 
-
+import profilePhoto from './assets/profile.jpg';
 import circuithubDashboard from './assets/circuithub/01-dashboard.png';
 import captivityHome from './assets/captivity-care/01-home.jpg';
 import jewelStorefront from './assets/jewel/01-storefront.jpg';
 import noisewatchReport from './assets/noisewatch/01-noise-report.png';
 import noisewatchQr from './assets/noisewatch/02-qr-download.png';
-
 
 function GithubIcon({ size = 16 }: { size?: number }) {
   return (
@@ -78,7 +77,6 @@ interface Project {
   belowLinksImage?: ProjectImage; // plain (non-phone-frame) image rendered directly under the links row
 }
 
-
 type TimelineType = 'education' | 'work' | 'cert';
 
 interface TimelineItem {
@@ -107,6 +105,10 @@ const TABS: Tab[] = [
   { id: 'timeline', label: 'timeline.log' },
   { id: 'contact', label: 'contact.sh' },
 ];
+
+// Nav bar is split around the centered avatar: first two tabs left, the rest right.
+const NAV_LEFT = TABS.slice(0, 2);
+const NAV_RIGHT = TABS.slice(2);
 
 const SKILL_GROUPS: SkillGroup[] = [
   { key: 'languages', accent: 'pink', items: ['JavaScript', 'Python', 'Java', 'SQL'] },
@@ -223,7 +225,6 @@ const GITHUB_USERNAME = 'carla-io';
 const GITHUB_URL = `https://github.com/${GITHUB_USERNAME}`;
 const CV_FILE_PATH = '/Dasal_Carla_C_Resume.pdf';
 
-
 const STATS: Stat[] = [
   { num: '2026', label: 'Grad Year' },
   { num: '5', label: 'Projects Shipped' },
@@ -246,94 +247,148 @@ export default function CarlaDasalPortfolio() {
   }, [lightbox]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries: IntersectionObserverEntry[]) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        });
-      },
-      { rootMargin: '-35% 0px -55% 0px', threshold: 0 }
-    );
-    Object.values(sectionRefs.current).forEach((el) => el && observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const updateActive = () => {
+    const line = window.innerHeight * 0.4; // section counts as "current" once its top passes this line
+    let current = TABS[0].id;
+
+    for (const t of TABS) {
+      const el = sectionRefs.current[t.id];
+      if (el && el.getBoundingClientRect().top <= line) current = t.id;
+    }
+
+    // at the very bottom of the page, highlight the last tab
+    const atBottom =
+      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+    if (atBottom) current = TABS[TABS.length - 1].id;
+
+    setActive(current);
+  };
+
+  updateActive();
+  window.addEventListener('scroll', updateActive, { passive: true });
+  window.addEventListener('resize', updateActive);
+  return () => {
+    window.removeEventListener('scroll', updateActive);
+    window.removeEventListener('resize', updateActive);
+  };
+}, []);
 
   const scrollTo = (id: string): void => {
     sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const scrollTop = (): void => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const setRef = (id: string) => (el: HTMLElement | null): void => {
     sectionRefs.current[id] = el;
   };
 
+  const renderTab = (t: Tab) => (
+    <button
+      key={t.id}
+      onClick={() => scrollTo(t.id)}
+      className={`cp-tab ${active === t.id ? 'cp-tab-active' : ''}`}
+    >
+      {t.label}
+    </button>
+  );
+
   return (
     <div className="cp-root">
-      <header className="cp-tabbar">
-        <div className="cp-dots">
-          <span className="cp-dot cp-dot-pink" />
-          <span className="cp-dot cp-dot-lilac" />
-          <span className="cp-dot cp-dot-mint" />
-        </div>
-        <nav className="cp-tabs">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => scrollTo(t.id)}
-              className={`cp-tab ${active === t.id ? 'cp-tab-active' : ''}`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </nav>
-      </header>
+      {/* BANNER */}
+      <header className="cp-banner">
+        <img className="cp-banner-img" src={profilePhoto} alt="Carla Dasal" />
+        <div className="cp-banner-shade" />
 
-      <main>
-        {/* ABOUT */}
-        <section id="about" ref={setRef('about')} className="cp-section cp-hero">
-          <div className="cp-eyebrow">// carla-dasal/portfolio</div>
+        <div className="cp-banner-status">
+          <span className="cp-status-dot" />
+          open to entry-level opportunities
+        </div>
+
+        <div className="cp-banner-copy">
+          <div className="cp-banner-kicker">// carla-dasal/portfolio</div>
           <h1 className="cp-hero-name">Carla Dasal</h1>
-          <p className="cp-hero-bio">
-            IT graduate from TUP with hands-on experience in software development, business solutions, and application design. My experience includes contributing to a Power Platform solution during my Telstra internship and independently developing full-stack web and mobile applications. I work with React, Node.js, Python, Java, SQL, and REST APIs, with a strong interest in building practical, scalable, and user-focused software.
-          </p>
-          <div className="cp-status">
-            <span className="cp-status-dot" />
-            open to entry-level opportunities
-          </div>
+          <p className="cp-banner-sub">IT Graduate · Full-stack &amp; Mobile Developer</p>
           <div className="cp-cta-row">
             <button className="cp-btn cp-btn-primary" onClick={() => scrollTo('projects')}>
               View projects
             </button>
-            <a className="cp-btn cp-btn-ghost" href={CV_FILE_PATH} target="_blank" rel="noopener noreferrer">
+            <a className="cp-btn cp-btn-light" href={CV_FILE_PATH} target="_blank" rel="noopener noreferrer">
               <Download size={15} /> View/Download CV
             </a>
-            <a className="cp-btn cp-btn-ghost" href="mailto:dasalcarla812@gmail.com">
+            <a className="cp-btn cp-btn-light" href="mailto:dasalcarla812@gmail.com">
               <Mail size={15} /> Email me
             </a>
           </div>
-          <div className="cp-stats">
-            {STATS.map((s) => (
-              <div key={s.label}>
-                <div className="cp-stat-num">{s.num}</div>
-                <div className="cp-stat-label">{s.label}</div>
+        </div>
+      </header>
+
+      {/* NAV — tabs split around a centered avatar */}
+      <nav className="cp-nav" aria-label="Sections">
+        <div className="cp-nav-side cp-nav-left">{NAV_LEFT.map(renderTab)}</div>
+        <button className="cp-nav-home" onClick={scrollTop} aria-label="Back to top">
+          <img src={profilePhoto} alt="" />
+        </button>
+        <div className="cp-nav-side cp-nav-right">{NAV_RIGHT.map(renderTab)}</div>
+      </nav>
+
+      <main>
+        {/* ABOUT */}
+        <section id="about" ref={setRef('about')} className="cp-section cp-about">
+          <div className="cp-about-grid">
+            <div className="cp-card cp-welcome">
+              <div className="cp-eyebrow">// about</div>
+              <div className="cp-welcome-note">welcome to my portfolio</div>
+              <h2 className="cp-welcome-title">Hi, I'm Carla.</h2>
+              <p className="cp-hero-bio">
+                IT graduate from TUP with hands-on experience in software development, business solutions, and application design. My experience includes contributing to a Power Platform solution during my Telstra internship and independently developing full-stack web and mobile applications. I work with React, Node.js, Python, Java, SQL, and REST APIs, with a strong interest in building practical, scalable, and user-focused software.
+              </p>
+
+              <div className="cp-tag-line">
+                <span>React</span>
+                <span>Python</span>
+                <span>Power Platform</span>
               </div>
-            ))}
-          </div>
-          <div className="cp-window">
-            <div className="cp-window-bar">
-              <span className="cp-dot cp-dot-pink" />
-              <span className="cp-dot cp-dot-lilac" />
-              <span className="cp-dot cp-dot-mint" />
-              <span className="cp-window-filename">about.tsx</span>
+
+              <div className="cp-window">
+                <div className="cp-window-bar">
+                  <span className="cp-dot cp-dot-pink" />
+                  <span className="cp-dot cp-dot-lilac" />
+                  <span className="cp-dot cp-dot-mint" />
+                  <span className="cp-window-filename">about.tsx</span>
+                </div>
+                <div className="cp-code">
+                  <div className="cp-code-line"><span className="cp-line-num">1</span><span><span className="cp-key">const</span> developer = {'{'}</span></div>
+                  <div className="cp-code-line"><span className="cp-line-num">2</span><span>&nbsp;&nbsp;name: <span className="cp-string">'Carla Dasal'</span>,</span></div>
+                  <div className="cp-code-line"><span className="cp-line-num">3</span><span>&nbsp;&nbsp;role: <span className="cp-string">'IT Graduate'</span>,</span></div>
+                  <div className="cp-code-line"><span className="cp-line-num">4</span><span>&nbsp;&nbsp;location: <span className="cp-string">'Paranaque City, PH'</span>,</span></div>
+                  <div className="cp-code-line"><span className="cp-line-num">5</span><span>&nbsp;&nbsp;stack: [<span className="cp-string">'React'</span>, <span className="cp-string">'Python'</span>, <span className="cp-string">'Power Platform'</span>],</span></div>
+                  <div className="cp-code-line"><span className="cp-line-num">6</span><span>&nbsp;&nbsp;status: <span className="cp-string">'open to opportunities'</span>,</span></div>
+                  <div className="cp-code-line"><span className="cp-line-num">7</span><span className="cp-punc">{'};'}</span></div>
+                </div>
+              </div>
             </div>
-            <div className="cp-code">
-              <div className="cp-code-line"><span className="cp-line-num">1</span><span><span className="cp-key">const</span> developer = {'{'}</span></div>
-              <div className="cp-code-line"><span className="cp-line-num">2</span><span>&nbsp;&nbsp;name: <span className="cp-string">'Carla Dasal'</span>,</span></div>
-              <div className="cp-code-line"><span className="cp-line-num">3</span><span>&nbsp;&nbsp;role: <span className="cp-string">'IT Graduate'</span>,</span></div>
-              <div className="cp-code-line"><span className="cp-line-num">4</span><span>&nbsp;&nbsp;location: <span className="cp-string">'Paranaque City, PH'</span>,</span></div>
-              <div className="cp-code-line"><span className="cp-line-num">5</span><span>&nbsp;&nbsp;stack: [<span className="cp-string">'React'</span>, <span className="cp-string">'Python'</span>, <span className="cp-string">'Power Platform'</span>],</span></div>
-              <div className="cp-code-line"><span className="cp-line-num">6</span><span>&nbsp;&nbsp;status: <span className="cp-string">'open to opportunities'</span>,</span></div>
-              <div className="cp-code-line"><span className="cp-line-num">7</span><span className="cp-punc">{'};'}</span></div>
-            </div>
+
+            <aside className="cp-about-side">
+              <div className="cp-stats">
+                {STATS.map((s) => (
+                  <div key={s.label}>
+                    <div className="cp-stat-num">{s.num}</div>
+                    <div className="cp-stat-label">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+
+              <figure className="cp-side-photo">
+                <img src={profilePhoto} alt="Carla Dasal portrait" />
+                <figcaption>
+                  <strong>Carla Dasal</strong>
+                  <span>IT Graduate · TUP 2026</span>
+                </figcaption>
+              </figure>
+            </aside>
           </div>
         </section>
 
@@ -345,9 +400,11 @@ export default function CarlaDasalPortfolio() {
             {SKILL_GROUPS.map((g) => (
               <div className="cp-skill-row" key={g.key}>
                 <span className={`cp-skill-key cp-skill-key-${g.accent}`}>{g.key}:</span>
-                {g.items.map((item) => (
-                  <span key={item} className={`cp-pill cp-pill-${g.accent}`}>{item}</span>
-                ))}
+                <div className="cp-skill-pills">
+                  {g.items.map((item) => (
+                    <span key={item} className={`cp-pill cp-pill-${g.accent}`}>{item}</span>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -487,7 +544,6 @@ export default function CarlaDasalPortfolio() {
               </article>
             ))}
           </div>
-
         </section>
 
         {/* TIMELINE */}
@@ -517,7 +573,7 @@ export default function CarlaDasalPortfolio() {
         </section>
 
         {/* CONTACT */}
-        <section id="contact" ref={setRef('contact')} className="cp-section">
+        <section id="contact" ref={setRef('contact')} className="cp-section cp-contact">
           <div className="cp-eyebrow">// contact</div>
           <h2 className="cp-heading">Let's talk</h2>
           <div className="cp-terminal">
