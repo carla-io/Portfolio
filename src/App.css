@@ -800,10 +800,10 @@ a.cp-contact-btn:hover { background: var(--pink); border-color: var(--pink-mid);
 
 /* ---------- Tablet and down ---------- */
 @media (max-width: 900px) {
-  .cp-about-grid { grid-template-columns: 1fr; }
+  .cp-about-grid { grid-template-columns: minmax(0, 1fr); }  
   .cp-side-photo { min-height: 340px; flex: none; }
-  .cp-skills-card { grid-template-columns: repeat(2, 1fr); }
-  .cp-project-full-split { grid-template-columns: 1fr; }
+    .cp-skills-card { grid-template-columns: minmax(0, 1fr); }  /* was 1fr */
+   .cp-project-full-split { grid-template-columns: minmax(0, 1fr); }
   .cp-project-media { order: -1; }
 
   /* tighter tabs so all 5 still fit around the avatar */
@@ -857,6 +857,9 @@ a.cp-contact-btn:hover { background: var(--pink); border-color: var(--pink-mid);
 
   /* About */
   .cp-card { padding: 22px; }
+  .cp-welcome,
+.cp-window,
+.cp-code { min-width: 0; max-width: 100%; }
   .cp-welcome-title { font-size: 32px; }
   .cp-tag-line span { padding: 0 10px; }
   .cp-code { font-size: 12px; }
