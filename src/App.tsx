@@ -16,6 +16,7 @@ import type { LucideIcon } from 'lucide-react';
 import './App.css';
 
 import profilePhoto from './assets/profile.jpg';
+import Picture from './assets/picture.jpg';
 import circuithubDashboard from './assets/circuithub/01-dashboard.png';
 import captivityHome from './assets/captivity-care/01-home.jpg';
 import jewelStorefront from './assets/jewel/01-storefront.jpg';
@@ -392,7 +393,7 @@ export default function CarlaDasalPortfolio() {
               </div>
 
               <figure className="cp-side-photo">
-                <img src={profilePhoto} alt="Carla Dasal portrait" />
+                <img src={Picture} alt="Carla Dasal portrait" />
                 <figcaption>
                   <strong>Carla Dasal</strong>
                   <span>IT Graduate · TUP 2026</span>
